@@ -1,50 +1,64 @@
 package com.icici.demo.entities;
 
+import lombok.Data;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import com.icici.demo.entities.Accounts;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Data
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
+    long customerId;
+    String name;
+    Long accountNumber;
+    int balance;
+    String email;
+    String password;
+    String phoneNumber;
+     @OneToMany (mappedBy="user", cascade =CascadeType.ALL)
+     List <Accounts> accounts=new ArrayList<>();
+    
 
-    String Name;
-    Long AccountNumber;
-    int Balance;
+    // public int getId() {
+    //     return id;
+    // }
 
-    public int getId() {
-        return id;
-    }
+    // public void setId(int id) {
+    //     this.id = id;
+    // }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    // public String getName() {
+    //     return Name;
+    // }
 
-    public String getName() {
-        return Name;
-    }
+    // public void setName(String name) {
+    //     Name = name;
+    // }
 
-    public void setName(String name) {
-        Name = name;
-    }
+    // public Long getAccountNumber() {
+    //     return AccountNumber;
+    // }
 
-    public Long getAccountNumber() {
-        return AccountNumber;
-    }
+    // public void setAccountNumber(Long accountNumber) {
+    //     AccountNumber = accountNumber;
+    // }
 
-    public void setAccountNumber(Long accountNumber) {
-        AccountNumber = accountNumber;
-    }
+    // public int getBalance() {
+    //     return Balance;
+    // }
 
-    public int getBalance() {
-        return Balance;
-    }
-
-    public void setBalance(int balance) {
-        Balance = balance;
-    }
+    // public void setBalance(int balance) {
+    //     Balance = balance;
+    // }
 
 }
