@@ -2,9 +2,10 @@ package com.icici.demo.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.icici.demo.entities.Accounts;
 import com.icici.demo.entities.Transactions;
 import com.icici.demo.repos.TransactionsRepository;
-
+import com.icici.demo.repos.AccountsRepository;
 import lombok.extern.slf4j.Slf4j;
 
 //import java.time.LocalDate;
@@ -28,7 +29,8 @@ public class TransactionsController {
 
     @Autowired
     TransactionsRepository transactionsRepository;
-
+    @Autowired
+    AccountsRepository accountRepository;
     @GetMapping("/transactions")
     public List<Transactions> fetchAllTransactions() {
         // logic to fetch from DB
@@ -48,10 +50,19 @@ public class TransactionsController {
         }
     }
 
-    @PostMapping("/transactions/{}")
+    @PostMapping("/transactions/")
     @ResponseStatus(HttpStatus.CREATED)
     public void addTransaction(@RequestBody Transactions transactions) {
+        Accounts senderAccount=transactions.getSenderAccount ();
+        int transactionAmount=transactions.getAmount();
+        Accounts receiverAccount=transactions.getReceiverAccount();
+        double senderFinalBalance=senderAccount.getBalance()-transactionAmount;
+        double receiverFinalBalance=receiverAccount.getBalance()+transactionAmount;
+        senderAccount.setBalance(senderFinalBalance);
+        receiverAccount.setBalance(receiverFinalBalance);
+
         transactionsRepository.save(transactions);
+        
     }
 
 

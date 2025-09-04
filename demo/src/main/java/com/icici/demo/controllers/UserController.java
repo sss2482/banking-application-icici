@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Slf4j
 @RestController
@@ -39,6 +41,22 @@ public class UserController {
         // logic to fetch from DB
         return userRepository.findAll();
     }
+    @GetMapping("/user/{userId}/accounts")
+    List<Accounts> fetchAllAccountsForUser(@PathVariable("userId") int userId){
+        Optional<Users> userFound = userRepository.findById(userId);
+        if (userFound.isPresent()) {
+            Users user=userFound.get();
+            log.debug("User Found " + userFound.get());
+            return user.getAccounts();
+        } else {
+            log.warn("User Not Found with id " + userId);
+            throw new UserNotFoundException("Trip not found with id " + userId);
+        }
+    }
+    public String getMethodName(@RequestParam String param) {
+        return new String();
+    }
+    
 
     @GetMapping("/users/{id}")
     public Users fetchAUser(@PathVariable("id") int id) {

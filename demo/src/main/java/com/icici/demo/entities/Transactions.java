@@ -26,6 +26,12 @@ public class Transactions {
     @JoinColumn(name = "receiverAccount", nullable = false)
     Accounts receiverAccount;
 
+
+
+
+
+
+    
     // public int getId() {
     // return id;
     // }
