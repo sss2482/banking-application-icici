@@ -4,6 +4,7 @@ package com.icici.demo.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.icici.demo.entities.Users;
+import com.icici.demo.repos.AccountsRepository;
 import com.icici.demo.repos.UserRepository;
 import com.icici.demo.entities.Accounts;
 
@@ -30,7 +31,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
-
+    
+    @Autowired
+    AccountsRepository accountRepository;
     @GetMapping("/users")
     public List<Users> fetchAllTrips() {
         // logic to fetch from DB
@@ -53,6 +56,23 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addUsers(@RequestBody Users users) {
         userRepository.save(users);
+    }
+    
+    @PostMapping("/users/{id}/accounts")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addAccountstoUser(@PathVariable("id")int id,@RequestBody Accounts accounts) {
+        Optional<Users> userFound = userRepository.findById(id);
+        if (userFound.isPresent()) {
+            accountRepository.save(accounts);
+            Users user = userFound.get();
+            List<Accounts> accountList= user.getAccounts();
+            accountList.add(accounts);
+            user.setAccounts(accountList);
+            userRepository.save(user);
+        } else {
+            throw new UserNotFoundException("Trip not found with id " + id);
+        }
+
     }
 
     @DeleteMapping("/users/{id}")

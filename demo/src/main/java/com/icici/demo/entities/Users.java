@@ -23,7 +23,7 @@ public class Users {
     String email;
     String password;
     String phoneNumber;
-    @OneToMany (mappedBy = "user",cascade =CascadeType.ALL)
+    @OneToMany (cascade =CascadeType.ALL)
     List <Accounts> accounts=new ArrayList<>();
             
 

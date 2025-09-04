@@ -3,7 +3,9 @@ package com.icici.demo.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.icici.demo.entities.Accounts;
+import com.icici.demo.entities.Users;
 import com.icici.demo.repos.AccountsRepository;
+import com.icici.demo.repos.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +29,8 @@ public class AccountsController {
 
     @Autowired
     AccountsRepository accountRepository;
-
+    @Autowired
+    UserRepository userRepository;
     @GetMapping("/accounts")
     public List<Accounts> fetchAllAccounts() {
         // logic to fetch from DB
@@ -49,13 +52,21 @@ public class AccountsController {
     @PostMapping("/accounts")
     @ResponseStatus(HttpStatus.CREATED)
     public void addAccounts(@RequestBody Accounts accounts) {
-        accountRepository.save(accounts);
+        // Users user=accounts.getUser();
+         accountRepository.save(accounts);
+       
     }
 
-    @DeleteMapping("/accounts/{id}")
-    public void deleteAccount(@PathVariable("id") int id) {
+    @DeleteMapping("/accounts/{accountId}/{userId}")
+    public void deleteAccount(@PathVariable("accountId") int id, @PathVariable("userId")int userId) {
         try {
-            accountRepository.deleteById(id);
+            Optional<Users> userFound = userRepository.findById(userId);
+            Optional<Accounts> accountFound = accountRepository.findById(id);
+            Accounts account=accountFound.get();
+            Users user=userFound.get();
+           List<Accounts>accountList=user.getAccounts();
+           accountList.remove(account);
+           accountRepository.deleteById(id);
         } catch (Exception e) {
             e.printStackTrace();
         }

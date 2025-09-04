@@ -20,8 +20,8 @@ public class Accounts {
     Long accountNumber;
     double balance;
     String accountType;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerId", nullable = false)
-    Users user;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "customerId", nullable = false)
+    // Users user;
 
 }

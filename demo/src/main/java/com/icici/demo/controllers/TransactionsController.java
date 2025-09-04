@@ -48,21 +48,12 @@ public class TransactionsController {
         }
     }
 
-    @PostMapping("/transactions")
+    @PostMapping("/transactions/{}")
     @ResponseStatus(HttpStatus.CREATED)
     public void addTransaction(@RequestBody Transactions transactions) {
         transactionsRepository.save(transactions);
     }
 
-    @DeleteMapping("/transactions/{id}")
-    public void deleteTransaction(@PathVariable("id") int id){
-       try{
-            transactionsRepository.deleteById(id);
-       }
-       catch(Exception e){
-        e.printStackTrace();
-       }
-        
-    }
+
 }
 
