@@ -17,10 +17,9 @@ import com.icici.demo.entities.Accounts;
 public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Long accountNumber;
     double balance;
     String accountType;
-    String accountNo;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerId", nullable = false)
     Users user;

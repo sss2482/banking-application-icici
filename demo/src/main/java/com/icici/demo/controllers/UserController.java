@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.icici.demo.entities.Users;
 import com.icici.demo.repos.UserRepository;
+import com.icici.demo.entities.Accounts;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public Users fetchATrip(@PathVariable("id") int id) {
+    public Users fetchAUser(@PathVariable("id") int id) {
         Optional<Users> userFound = userRepository.findById(id);
         if (userFound.isPresent()) {
             log.debug("User Found " + userFound.get());
@@ -49,12 +51,12 @@ public class UserController {
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addTrips(@RequestBody Users users) {
+    public void addUsers(@RequestBody Users users) {
         userRepository.save(users);
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteTrip(@PathVariable("id") int id) {
+    public void deleteUser(@PathVariable("id") int id) {
         try {
             userRepository.deleteById(id);
         } catch (Exception e) {
@@ -62,6 +64,21 @@ public class UserController {
         }
 
     }
+
+    // @PostMapping("/users/{id}/accounts")
+    // public void addAccountToUser(@PathVariable("id") int id, @RequestBody Accounts accounts) {
+    //     Optional<Users> userFound = userRepository.findById(id);
+    //     if (userFound.isPresent()) {
+    //         Users user = userFound.get();
+    //         List<Accounts> account = user.getAccounts();
+    //         accounts.add(accounts);
+    //         user.setAccounts(accounts);
+    //         userRepository.save(user);
+    //     } else {
+    //         throw new AccountNotFoundException("Account not found with id " + id);
+    //     }
+    // }
+    
 
 }
 

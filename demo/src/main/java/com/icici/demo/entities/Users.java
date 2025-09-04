@@ -17,17 +17,15 @@ import java.util.List;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
-    long customerId;
+    int customerId;
     String name;
-    Long accountNumber;
     int balance;
     String email;
     String password;
     String phoneNumber;
-     @OneToMany (mappedBy="user", cascade =CascadeType.ALL)
-     List <Accounts> accounts=new ArrayList<>();
-    
+    @OneToMany (mappedBy = "user",cascade =CascadeType.ALL)
+    List <Accounts> accounts=new ArrayList<>();
+            
 
     // public int getId() {
     //     return id;

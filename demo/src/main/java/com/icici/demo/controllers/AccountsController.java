@@ -61,4 +61,9 @@ public class AccountsController {
         }
     }
 
+    @PostMapping("/accounts/")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addItinerary(@RequestBody Accounts accounts) {
+        accountRepository.save(accounts);
+    }
 }

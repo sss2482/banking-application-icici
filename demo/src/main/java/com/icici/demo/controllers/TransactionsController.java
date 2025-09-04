@@ -36,7 +36,7 @@ public class TransactionsController {
     }
 
      @GetMapping("/transactions/{id}")
-    public Transactions fetchATrip(@PathVariable("id") int id){
+    public Transactions fetchATransaction(@PathVariable("id") int id){
          Optional<Transactions> transactionsFound = transactionsRepository.findById(id);
          if(transactionsFound.isPresent()){
             log.debug("Transaction Found "+ transactionsFound.get());
@@ -50,12 +50,12 @@ public class TransactionsController {
 
     @PostMapping("/transactions")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addTrips(@RequestBody Transactions transactions) {
+    public void addTransaction(@RequestBody Transactions transactions) {
         transactionsRepository.save(transactions);
     }
 
     @DeleteMapping("/transactions/{id}")
-    public void deleteTrip(@PathVariable("id") int id){
+    public void deleteTransaction(@PathVariable("id") int id){
        try{
             transactionsRepository.deleteById(id);
        }
