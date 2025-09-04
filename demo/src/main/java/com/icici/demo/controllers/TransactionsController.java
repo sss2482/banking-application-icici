@@ -53,18 +53,37 @@ public class TransactionsController {
     @PostMapping("/transactions/")
     @ResponseStatus(HttpStatus.CREATED)
     public void addTransaction(@RequestBody Transactions transactions) {
-        Accounts senderAccount=transactions.getSenderAccount ();
-        int transactionAmount=transactions.getAmount();
-        Accounts receiverAccount=transactions.getReceiverAccount();
-        if(transactionAmount>senderAccount.getBalance()){
-            log.warn("sender does not have this much money");
-            throw new TransactionNotFoundException("transaction can not be initiated");
+        long senderAccountNumber = transactions.getSenderAccount().getAccountNumber();
+        Optional<Accounts> senderAccount= accountRepository.findById(senderAccountNumber);
+        if(!senderAccount.isPresent()){
+            log.warn("sender account not found");
+            throw new AccountNotFoundException("sender account not found with id " + senderAccountNumber);
         }
-        double senderFinalBalance=senderAccount.getBalance()-transactionAmount;
-        double receiverFinalBalance=receiverAccount.getBalance()+transactionAmount;
-        senderAccount.setBalance(senderFinalBalance);
-        receiverAccount.setBalance(receiverFinalBalance);
-
+        long receiverAccountNumber = transactions.getReceiverAccount().getAccountNumber();
+        Optional<Accounts> receiverAccount= accountRepository.findById(receiverAccountNumber);
+        if(!receiverAccount.isPresent()){
+            log.warn("receiver account not found");
+            throw new AccountNotFoundException("receiver account not found with id " + receiverAccountNumber);
+        }
+        Accounts senderAccountMain=senderAccount.get();
+        Accounts receiverAccountMain=receiverAccount.get();
+        // System.out.println(senderAccount);
+        int transactionAmount=transactions.getAmount();
+        // System.out.println(transactionAmount);
+        
+        // System.out.println(receiverAccount);
+        if(transactionAmount>senderAccountMain.getBalance()){
+            log.warn("sender does not have this much money");
+            
+        }
+        double senderFinalBalance=senderAccountMain.getBalance()-transactionAmount;
+        double receiverFinalBalance=receiverAccountMain.getBalance()+transactionAmount;
+        senderAccountMain.setBalance(senderFinalBalance);
+        receiverAccountMain.setBalance(receiverFinalBalance);
+        accountRepository.save(senderAccountMain);
+        accountRepository.save(receiverAccountMain);
+        transactions.setSenderAccount(senderAccountMain);
+        transactions.setReceiverAccount(receiverAccountMain);
         transactionsRepository.save(transactions);
         
     }

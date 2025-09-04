@@ -38,7 +38,7 @@ public class AccountsController {
     }
 
     @GetMapping("/accounts/{id}")
-    public Accounts fetchAAccount(@PathVariable("id") int id) {
+    public Accounts fetchAAccount(@PathVariable("id") long id) {
         Optional<Accounts> accountFound = accountRepository.findById(id);
         if (accountFound.isPresent()) {
             log.debug("Account Found " + accountFound.get());
@@ -58,7 +58,7 @@ public class AccountsController {
     }
 
     @DeleteMapping("/accounts/{accountId}/{userId}")
-    public void deleteAccount(@PathVariable("accountId") int id, @PathVariable("userId")int userId) {
+    public void deleteAccount(@PathVariable("accountId") long id, @PathVariable("userId") int userId) {
         try {
             Optional<Users> userFound = userRepository.findById(userId);
             Optional<Accounts> accountFound = accountRepository.findById(id);
