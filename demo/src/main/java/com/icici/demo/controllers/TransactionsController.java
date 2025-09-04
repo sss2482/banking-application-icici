@@ -56,6 +56,10 @@ public class TransactionsController {
         Accounts senderAccount=transactions.getSenderAccount ();
         int transactionAmount=transactions.getAmount();
         Accounts receiverAccount=transactions.getReceiverAccount();
+        if(transactionAmount>senderAccount.getBalance()){
+            log.warn("sender does not have this much money");
+            throw new TransactionNotFoundException("transaction can not be initiated");
+        }
         double senderFinalBalance=senderAccount.getBalance()-transactionAmount;
         double receiverFinalBalance=receiverAccount.getBalance()+transactionAmount;
         senderAccount.setBalance(senderFinalBalance);
