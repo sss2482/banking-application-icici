@@ -1,6 +1,9 @@
 package com.icici.demo.entities;
 
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 //import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,6 +25,7 @@ public class Transactions {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "senderAccount", nullable = false)
     Accounts senderAccount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiverAccount", nullable = false)
     Accounts receiverAccount;

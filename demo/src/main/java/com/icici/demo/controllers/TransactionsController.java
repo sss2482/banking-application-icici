@@ -36,7 +36,9 @@ public class TransactionsController {
     @GetMapping("/transactions")
     public List<Transactions> fetchAllTransactions() {
         // logic to fetch from DB
-        return transactionsRepository.findAll();
+        List<Transactions> transactions = transactionsRepository.findAll().stream().toList();
+        System.out.println(transactions);
+        return transactions;
     }
 
      @GetMapping("/transactions/{id}")
