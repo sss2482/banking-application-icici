@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,19 +23,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Slf4j
 @RestController
+@CrossOrigin
 public class AccountsController {
 
     @Autowired
     AccountsRepository accountRepository;
     @Autowired
     UserRepository userRepository;
-    @GetMapping("/accounts")
+    @GetMapping("/all_accounts")
+    @CrossOrigin
     public List<Accounts> fetchAllAccounts() {
         // logic to fetch from DB
         return accountRepository.findAll();
+    }
+
+
+
+    @GetMapping("/accounts")
+    public List<Accounts> fetchAccounts(@RequestHeader("userId") int userId) {
+        return userRepository.findById(userId).get().getAccounts();
     }
 
     @GetMapping("/accounts/{id}")
@@ -53,8 +64,8 @@ public class AccountsController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addAccounts(@RequestBody Accounts accounts) {
         // Users user=accounts.getUser();
-         accountRepository.save(accounts);
-       
+        accountRepository.save(accounts);
+        
     }
 
     @DeleteMapping("/accounts/{accountId}/{userId}")
