@@ -25,6 +25,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+
 @Slf4j
 @RestController
 @CrossOrigin
@@ -36,10 +40,37 @@ public class AccountsController {
     UserRepository userRepository;
     @GetMapping("/all_accounts")
     @CrossOrigin
-    public List<Accounts> fetchAllAccounts() {
+    @ResponseStatus(HttpStatus.OK)
+
+    public Page<Accounts> fetchAllAccounts() {
         // logic to fetch from DB
-        return accountRepository.findAll();
+
+
+
+        return userRepository.findAll().stream().map(user -> {
+            List<Accounts> accounts = user.getAccounts();
+            return accounts.stream().map(account -> {
+                AccountInfoDTO dto = new AccountInfoDTO();
+                dto.setAccountNumber(account.getAccountNumber());
+                dto.setBalance(account.getBalance());
+                dto.setAccountType(account.getAccountType());
+                dto.setAccountHolderName(user.getName());
+                dto.setEmail(user.getEmail());
+                dto.setPhoneNumber(user.getPhoneNumber());
+                return dto;
+            }).toList();
+        }).toList();
     }
+
+
+
+    // @GetMapping("/accounts")
+    // public List<Accounts> fetchAccounts(@RequestHeader("userId") int userId) {
+    //     return userRepository.findById(userId).get().getAccounts();
+    // }
+    //     }
+    //     user.getAccounts().stream()).toList();
+    // }
 
 
 
