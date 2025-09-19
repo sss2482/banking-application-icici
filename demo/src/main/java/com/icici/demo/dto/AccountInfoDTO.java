@@ -1,8 +1,8 @@
-
+package com.icici.demo.dto;
 import lombok.Data;
 
 @Data
-public class AccounInfoDTO {
+public class AccountInfoDTO {
     Long accountNumber;
     double balance;
     String accountType;

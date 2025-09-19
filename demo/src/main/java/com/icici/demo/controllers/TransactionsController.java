@@ -82,7 +82,7 @@ public class TransactionsController {
                 transactions.add(tranDTO);
             });
 
-
+            
             receivedTransactions.stream().forEach(t -> {
                 TransactionDTO tranDTO = new TransactionDTO();
                 tranDTO.setId(id.getAndIncrement());
@@ -139,6 +139,8 @@ public class TransactionsController {
         // System.out.println(receiverAccount);
         if (transactionAmount > senderAccountMain.getBalance()) {
             log.warn("sender does not have this much money");
+            throw new InsufficientBalanceException("Transaction amount " + transactionAmount
+                    + " is more than the available balance " + senderAccountMain.getBalance());
 
         }
         double senderFinalBalance = senderAccountMain.getBalance() - transactionAmount;

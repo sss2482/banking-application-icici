@@ -2,6 +2,7 @@ package com.icici.demo.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.icici.demo.dto.AccountInfoDTO;
 import com.icici.demo.entities.Accounts;
 import com.icici.demo.entities.Users;
 import com.icici.demo.repos.AccountsRepository;
@@ -27,42 +28,44 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import com.icici.demo.dto.AccountInfoDTO;
+import com.icici.demo.services.AccountsService;
 
 @Slf4j
 @RestController
 @CrossOrigin
 public class AccountsController {
 
+
+
+
+
     @Autowired
     AccountsRepository accountRepository;
     @Autowired
     UserRepository userRepository;
+    private final AccountsService accountsService;
+    // Constructor injection (recommended)
+    public AccountsController(AccountsService accountsService) {
+        this.accountsService = accountsService;
+    }
+
     @GetMapping("/all_accounts")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
-
-    public Page<Accounts> fetchAllAccounts() {
+    public List<AccountInfoDTO> fetchAllAccounts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestHeader("userId") int userId) {
         // logic to fetch from DB
-
-
-
-        return userRepository.findAll().stream().map(user -> {
-            List<Accounts> accounts = user.getAccounts();
-            return accounts.stream().map(account -> {
-                AccountInfoDTO dto = new AccountInfoDTO();
-                dto.setAccountNumber(account.getAccountNumber());
-                dto.setBalance(account.getBalance());
-                dto.setAccountType(account.getAccountType());
-                dto.setAccountHolderName(user.getName());
-                dto.setEmail(user.getEmail());
-                dto.setPhoneNumber(user.getPhoneNumber());
-                return dto;
-            }).toList();
-        }).toList();
+        
+        return accountsService.getAllAccounts(page, size);
     }
 
 
+    @GetMapping("/accounts/is_exists/{accountId}")
+    public boolean checkIfAccountExists(@PathVariable("accountId") long accountId) {
+        boolean exists = accountRepository.findById(accountId).isPresent();
+        System.out.println("Account exists: " + exists);
+        return exists;
+    }
 
     // @GetMapping("/accounts")
     // public List<Accounts> fetchAccounts(@RequestHeader("userId") int userId) {
