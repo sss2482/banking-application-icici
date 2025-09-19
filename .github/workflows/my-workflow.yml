@@ -22,7 +22,7 @@ jobs:
           java-version: '21'
 
       - name: Grant execute permission to mvnw
-        run: chmod +x mvnw
+        run: chmod +x demo/mvnw
 
       - name: Cache Maven packages
         uses: actions/cache@v4
