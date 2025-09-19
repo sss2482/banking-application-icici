@@ -113,6 +113,7 @@ public class AccountsController {
            accountList.remove(account);
            accountRepository.deleteById(id);
         } catch (Exception e) {
+            System.out.println("Error deleting account with id " + id + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
